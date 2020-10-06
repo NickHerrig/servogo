@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	p := os.Getenv("PYSERVO_USB_PORT")
+	p := os.Getenv("SERVO_USB_PORT")
 
 	options := serial.OpenOptions{
 		PortName:        p,
