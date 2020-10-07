@@ -2,42 +2,54 @@ package main
 
 import (
 	"log"
-	"os"
-	"strconv"
+	//	"os"
+	"fmt"
+	//	"strconv"
 
-	"github.com/jacobsa/go-serial/serial"
+	"go.bug.st/serial"
 )
 
 func main() {
 
-	p := os.Getenv("SERVO_USB_PORT")
-	i := os.Getenv("SERVO_DRIVE_ID")
+	//	p := os.Getenv("SERVO_USB_PORT")
+	//	i := os.Getenv("SERVO_DRIVE_ID")
+	//
+	//	id, err := strconv.Atoi(i)
+	//	if err != nil {
+	//		log.Fatalf("Failed to convert servo id env var to stringe: %v", err)
+	//	}
 
-	id, err := strconv.Atoi(i)
+	ports, err := serial.GetPortsList()
 	if err != nil {
-		log.Fatalf("Failed to convert servo id env var to stringe: %v", err)
+		log.Fatal(err)
 	}
 
-	options := serial.OpenOptions{
-		PortName:        p,
-		BaudRate:        38400,
-		DataBits:        8,
-		StopBits:        1,
-		MinimumReadSize: 4,
+	for _, port := range ports {
+		fmt.Printf("Found port: %v\n", port)
 	}
 
-	port, err := serial.Open(options)
+	mode := &serial.Mode{
+		BaudRate: 38400,
+		Parity:   serial.NoParity,
+		DataBits: 8,
+		StopBits: serial.OneStopBit,
+	}
+
+	port, err := serial.Open("/dev/cu.usbserial-DN04SV8H", mode)
 	if err != nil {
-		log.Fatalf("serial.Open: %v", err)
+		log.Fatal(err)
 	}
-
 	defer port.Close()
 
-	pkt = []byte{}
+	//forward packet = x02 xe3 xbd xfe xc9 x80 xe9
+	//stop packet = x02 x83 x80 x85
 
-	n, err := port.Write(pk)
+	stop := []byte{0x02, 0x83, 0x80, 0x85}
+
+	n, err := port.Write(stop)
 	if err != nil {
-		log.Fatalf("port.Write: %v", err)
+		log.Fatal(err)
 	}
 
+	fmt.Println(n)
 }
