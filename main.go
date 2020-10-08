@@ -1,26 +1,30 @@
 package main
 
 import (
-	"flag"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"time"
-    "fmt"
 
 	"github.com/tarm/serial"
 )
 
-var data = flag.Int("data", 1, "numerical data to pass to the servo drive")
-
 func main() {
-    flag.Parse()
-    fmt.Printf("Arguments: %s \n", flag.Args())
-
-    fmt.Println(*data)
+	if len(os.Args) == 2 {
+		command := os.Args[1]
+		fmt.Println(command)
+	} else if len(os.Args) == 3 {
+		command := os.Args[1]
+		data := os.Args[2]
+		fmt.Println("command:", command, "data", data)
+	} else {
+		log.Fatal("servogo takes up to two arguments: 'servogo stop' or 'servogo send-to 300'.")
+	}
 
 	p := os.Getenv("SERVO_USB_PORT")
 	i := os.Getenv("SERVO_DRIVE_ID")
+
 	id, err := strconv.Atoi(i)
 	if err != nil {
 		log.Fatalf("Failed to convert servo id env var to stringe: %v", err)
