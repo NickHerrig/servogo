@@ -11,26 +11,11 @@ import (
 	"github.com/tarm/serial"
 )
 
+var data = flag.Int("data", 1, "numerical data to pass to the servo drive")
+
 func main() {
-    motorCommand := flag.NewFlagSet("command", flag.ExitOnError)
-	data := motorCommand.Int("data", 1, "numerical data to pass to the servo drive")
-
-    if len(os.Args) < 2 {
-        fmt.Println("One motor command is required, example: 'servogo stop' or 'servogo forward'")
-        os.Exit(1)
-    }
-
-    switch os.Args[1] {
-    case "stop":
-        //TODO Implement stopMotor()
-        motorCommand.Parse(os.Args[2:])
-        if *data > 1 {
-            log.Fatal("stop command doesn't take data")
-        }
-    default:
-        fmt.Printf("servo command %s not implemented yet.\n", os.Args[1])
-        os.Exit(1)
-    }
+    flag.Parse()
+    fmt.Printf("Arguments: %s \n", flag.Args())
 
     fmt.Println(*data)
 
