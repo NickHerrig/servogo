@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 	"strconv"
@@ -10,6 +11,9 @@ import (
 )
 
 func main() {
+
+	data := flag.Int("data", 1, "numerical data to pass to the servo drive")
+	flag.Parse()
 
 	p := os.Getenv("SERVO_USB_PORT")
 	i := os.Getenv("SERVO_DRIVE_ID")
