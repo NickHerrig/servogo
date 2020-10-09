@@ -1,9 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"testing"
-    "reflect"
 )
 
 func TestPacketLength(t *testing.T) {
@@ -11,7 +11,7 @@ func TestPacketLength(t *testing.T) {
 		name      string
 		input     int
 		want      byte
-		wantError error 
+		wantError error
 	}{
 		{"one positive data packet", 50, 0x80, nil},
 		{"one negative data packet", -50, 0x80, nil},
@@ -28,18 +28,18 @@ func TestPacketLength(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			pl, err := packetLength(tt.input)
 
-            if err != nil{
-			    if errors.Is(err, tt.wantError) {
-			      	t.Errorf("want %q; got %q", tt.wantError, err)
-                }
-            }else{
-			    if pl != tt.want {
-			    	t.Errorf("want %q; got %q", tt.want, pl)
-			    }
-			    if err != tt.wantError {
-			    	t.Errorf("want %q; got %q", tt.wantError, err)
-			    }
-            } 
+			if err != nil {
+				if errors.Is(err, tt.wantError) {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
+			} else {
+				if pl != tt.want {
+					t.Errorf("want %q; got %q", tt.want, pl)
+				}
+				if err != tt.wantError {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
+			}
 		})
 	}
 }
@@ -49,26 +49,27 @@ func TestDataBytes(t *testing.T) {
 		name      string
 		input     int
 		want      []byte
-		wantError error 
+		wantError error
 	}{
-		{"one data packet", 3, []byte{0x83}, nil},
+		{"one positive data packet", 60, []byte{0xbc}, nil},
+		{"one negative data packet", -60, []byte{0xc4}, nil},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			b, err := dataBytes(tt.input)
 
-            if err != nil{
-			    if errors.Is(err, tt.wantError) {
-			      	t.Errorf("want %q; got %q", tt.wantError, err)
-                }
-            }else{
-			    if reflect.DeepEqual(b, tt.want) {
-			    	t.Errorf("want %q; got %q", tt.want, b)
-			    }
-			    if err != tt.wantError {
-			    	t.Errorf("want %q; got %q", tt.wantError, err)
-			    }
-            } 
+			if err != nil {
+				if errors.Is(err, tt.wantError) {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
+			} else {
+				if bytes.Equal(b, tt.want) != true {
+					t.Errorf("want %q; got %q", tt.want, b)
+				}
+				if err != tt.wantError {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
+			}
 		})
 	}
 }
