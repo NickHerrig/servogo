@@ -15,12 +15,12 @@ func TestPacketLength(t *testing.T) {
 	}{
 		{"one positive data packet", 50, 0x80, nil},
 		{"one negative data packet", -50, 0x80, nil},
-		{"two positive data packets", 8000, 0xa0, nil},
-		{"two negative data packets", -8000, 0xa0, nil},
-		{"three positive data packets", 1000000, 0xc0, nil},
-		{"three negative data packets", -1000000, 0xc0, nil},
-		{"four positive data packets", 130000000, 0xe0, nil},
-		{"four negative data packets", -130000000, 0xe0, nil},
+		{"two positive data packets", 8000, 0xA0, nil},
+		{"two negative data packets", -8000, 0xA0, nil},
+		{"three positive data packets", 1000000, 0xC0, nil},
+		{"three negative data packets", -1000000, 0xC0, nil},
+		{"four positive data packets", 130000000, 0xE0, nil},
+		{"four negative data packets", -130000000, 0xE0, nil},
 		{"five positive data packets", 140000000, 0, PacketLengthParseError},
 		{"five negative data packets", -140000000, 0, PacketLengthParseError},
 	}
@@ -51,8 +51,12 @@ func TestDataBytes(t *testing.T) {
 		want      []byte
 		wantError error
 	}{
-		{"one positive data packet", 60, []byte{0xbc}, nil},
-		{"one negative data packet", -60, []byte{0xc4}, nil},
+		{"one positive data packet", 60, []byte{0xBC}, nil},
+		{"one negative data packet", -60, []byte{0xC4}, nil},
+		{"two positive data packet", 150, []byte{0x81, 0x96}, nil},
+		{"two negative data packet", -150, []byte{0xFE, 0xEA}, nil},
+		{"error five positive data packet", 140700900, nil, PacketLengthParseError},
+		{"error five negative data packet", -140080900, nil, PacketLengthParseError},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

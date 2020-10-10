@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 )
 
 var PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
@@ -32,17 +31,17 @@ func dataBytes(d int) ([]byte, error) {
 
 	l, err := packetLength(d)
 	if err != nil {
-		log.Fatal(err)
+        return nil, PacketLengthParseError
 	}
 
 	if l == 0x80 {
 		return []byte{do}, nil
 	} else if l == 0xa0 {
-		return []byte{do, dt}, nil
+		return []byte{dt, do}, nil
 	} else if l == 0xc0 {
-		return []byte{do, dt, dh}, nil
+		return []byte{dh, dt, do}, nil
 	} else if l == 0xe0 {
-		return []byte{do, dt, dh, df}, nil
+		return []byte{df, dh, dt, do}, nil
 	} else {
 		return nil, DataParseError 
 	}
