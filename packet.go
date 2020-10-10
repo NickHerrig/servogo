@@ -7,8 +7,16 @@ import (
 var PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
 var DataParseError = errors.New("dataBytes(): data could not be parsed int 1-4 bytes.")
 
+func checksumByte(p []byte) byte {
+    var cs byte
+    for _, v := range p {
+        cs += v
+    }
+    return (cs & 0x7f) |  0x80
+}
+
 func packetLength(d int) (byte, error) {
-   
+
 	if d >= -64 && d <= 63 {
 		return 0x80, nil
 	} else if d >= -8192 && d <= 8191 {
@@ -18,23 +26,23 @@ func packetLength(d int) (byte, error) {
 	} else if d >= -134217728 && d <= 134217727 {
 		return 0xe0, nil
 	} else {
-		return 0, PacketLengthParseError 
+		return 0, PacketLengthParseError
 	}
 }
 
 func dataBytes(d int) ([]byte, error) {
 	l, err := packetLength(d)
 	if err != nil {
-        return nil, PacketLengthParseError
+		return nil, PacketLengthParseError
 	}
 
-    // parse data into 4 bytes (7 bits long), and add start start bitr
+	// parse data into 4 bytes (7 bits long), and add start start bitr
 	var df byte = byte(((d & 0xFE00000) >> 21) | 0x80)
 	var dh byte = byte(((d & 0x1FC000) >> 14) | 0x80)
 	var dt byte = byte(((d & 0x3F80) >> 7) | 0x80)
 	var do byte = byte((d & 0x7F) | 0x80)
 
-    //return byte slice deppending on packet length
+	//return byte slice deppending on packet length
 	if l == 0x80 {
 		return []byte{do}, nil
 	} else if l == 0xa0 {
@@ -44,7 +52,7 @@ func dataBytes(d int) ([]byte, error) {
 	} else if l == 0xe0 {
 		return []byte{df, dh, dt, do}, nil
 	} else {
-        return nil, DataParseError
-    }
+		return nil, DataParseError
+	}
 
 }
