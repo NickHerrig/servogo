@@ -55,6 +55,10 @@ func TestDataBytes(t *testing.T) {
 		{"one negative data packet", -60, []byte{0xC4}, nil},
 		{"two positive data packet", 150, []byte{0x81, 0x96}, nil},
 		{"two negative data packet", -150, []byte{0xFE, 0xEA}, nil},
+		{"three positive data packet", 9000, []byte{0x80, 0xC6, 0xA8}, nil},
+		{"three negative data packet", -9000, []byte{0xFF, 0xB9, 0xD8}, nil},
+		{"four positive data packet", 120000000, []byte{0xB9, 0x9C, 0x9C, 0x80}, nil},
+		{"four negative data packet", -120000000, []byte{0xC6, 0xE3, 0xE4, 0x80}, nil},
 		{"error five positive data packet", 140700900, nil, PacketLengthParseError},
 		{"error five negative data packet", -140080900, nil, PacketLengthParseError},
 	}
