@@ -5,7 +5,11 @@ import (
 	"log"
 )
 
+var PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
+var DataParseError = errors.New("dataBytes(): data could not be parsed int 1-4 bytes.")
+
 func packetLength(d int) (byte, error) {
+   
 	if d >= -64 && d <= 63 {
 		return 0x80, nil
 	} else if d >= -8192 && d <= 8191 {
@@ -15,7 +19,7 @@ func packetLength(d int) (byte, error) {
 	} else if d >= -134217728 && d <= 134217727 {
 		return 0xe0, nil
 	} else {
-		return 0, errors.New("packetLength(): data out of range for dmm servo!")
+		return 0, PacketLengthParseError 
 	}
 }
 
@@ -40,7 +44,7 @@ func dataBytes(d int) ([]byte, error) {
 	} else if l == 0xe0 {
 		return []byte{do, dt, dh, df}, nil
 	} else {
-		return nil, errors.New("dataBytes(): Could not parse data byte")
+		return nil, DataParseError 
 	}
 
 }

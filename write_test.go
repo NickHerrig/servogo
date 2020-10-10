@@ -21,15 +21,15 @@ func TestPacketLength(t *testing.T) {
 		{"three negative data packets", -1000000, 0xc0, nil},
 		{"four positive data packets", 130000000, 0xe0, nil},
 		{"four negative data packets", -130000000, 0xe0, nil},
-		{"five positive data packets", 140000000, 0, errors.New("data out of range for dmm servo!")},
-		{"five negative data packets", -140000000, 0, errors.New("data out of range for dmm servo!")},
+		{"five positive data packets", 140000000, 0, PacketLengthParseError},
+		{"five negative data packets", -140000000, 0, PacketLengthParseError},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pl, err := packetLength(tt.input)
 
 			if err != nil {
-				if errors.Is(err, tt.wantError) {
+				if errors.Is(err, tt.wantError) != true {
 					t.Errorf("want %q; got %q", tt.wantError, err)
 				}
 			} else {
@@ -59,7 +59,7 @@ func TestDataBytes(t *testing.T) {
 			b, err := dataBytes(tt.input)
 
 			if err != nil {
-				if errors.Is(err, tt.wantError) {
+				if errors.Is(err, tt.wantError) != true {
 					t.Errorf("want %q; got %q", tt.wantError, err)
 				}
 			} else {
