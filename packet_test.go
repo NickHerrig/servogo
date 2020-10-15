@@ -84,9 +84,9 @@ func TestDataBytes(t *testing.T) {
 
 func TestChecksumByte(t *testing.T) {
 	tests := []struct {
-		name   string
-		input  []byte 
-		want   byte
+		name  string
+		input []byte
+		want  byte
 	}{
 		{"four byte packet", []byte{0x02, 0x83, 0x80}, 0x85},
 		{"five byte packet", []byte{0x03, 0x82, 0x82, 0x86}, 0x8d},
@@ -106,8 +106,8 @@ func TestChecksumByte(t *testing.T) {
 func TestPacketLengthFuncCodeByte(t *testing.T) {
 	tests := []struct {
 		name      string
-		packetLen byte 
-		funcCode  byte 
+		packetLen byte
+		funcCode  byte
 		want      byte
 	}{
 		{"four packet, relative func code", 0x80, 0x03, 0x83},

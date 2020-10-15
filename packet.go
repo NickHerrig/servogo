@@ -8,15 +8,15 @@ var PacketLengthParseError = errors.New("packetLength(): data out of range for d
 var DataParseError = errors.New("dataBytes(): data could not be parsed int 1-4 bytes.")
 
 func checksumByte(p []byte) byte {
-    var cs byte
-    for _, v := range p {
-        cs += v
-    }
-    return (cs & 0x7f) |  0x80
+	var cs byte
+	for _, v := range p {
+		cs += v
+	}
+	return (cs & 0x7f) | 0x80
 }
 
-func packetLengthFuncCodeByte(l, f byte) (byte) {
-    return l | f
+func packetLengthFuncCodeByte(l, f byte) byte {
+	return l | f
 }
 
 func packetLength(d int) (byte, error) {
