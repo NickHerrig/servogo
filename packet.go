@@ -15,6 +15,10 @@ func checksumByte(p []byte) byte {
     return (cs & 0x7f) |  0x80
 }
 
+func packetLengthFuncCodeByte(l, f byte) (byte) {
+    return l | f
+}
+
 func packetLength(d int) (byte, error) {
 
 	if d >= -64 && d <= 63 {
@@ -36,7 +40,7 @@ func dataBytes(d int) ([]byte, error) {
 		return nil, PacketLengthParseError
 	}
 
-	// parse data into 4 bytes (7 bits long), and add start start bitr
+	// parse data into 4 bytes (7 bits long), and add start start bit
 	var df byte = byte(((d & 0xFE00000) >> 21) | 0x80)
 	var dh byte = byte(((d & 0x1FC000) >> 14) | 0x80)
 	var dt byte = byte(((d & 0x3F80) >> 7) | 0x80)
