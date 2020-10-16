@@ -6,6 +6,7 @@ import (
 
 var PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
 var DataParseError = errors.New("dataBytes(): data could not be parsed int 1-4 bytes.")
+var FuncCodeNotImplemented = errors.New("funcCode(): That command isn't implemetnted.")
 
 func checksumByte(p []byte) byte {
 	var cs byte
@@ -17,6 +18,18 @@ func checksumByte(p []byte) byte {
 
 func packetLengthFuncCodeByte(l, f byte) byte {
 	return l | f
+}
+
+func funcCode(c string) (byte, error) {
+	codes := map[string]byte{
+		"stop": 0x03,
+	}
+
+	if fc, ok := codes[c]; ok {
+		return fc, nil
+	} else {
+		return 0, FuncCodeNotImplemented
+	}
 }
 
 func packetLength(d int) (byte, error) {
