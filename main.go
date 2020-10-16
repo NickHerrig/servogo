@@ -11,12 +11,15 @@ import (
 )
 
 func main() {
+	var c string
+	var d int
+
 	if len(os.Args) == 2 {
-		c := os.Args[1]
-		d := byte(0)
+		c = os.Args[1]
+		d = 0
 		fmt.Println("Command:", c, "Data:", d)
 	} else if len(os.Args) == 3 {
-		c := os.Args[1]
+		c = os.Args[1]
 		ds := os.Args[2]
 		d, err := strconv.Atoi(ds)
 		if err != nil {
@@ -24,36 +27,46 @@ func main() {
 		}
 		fmt.Println("Command: ", c, "Data: ", d)
 	} else {
-		log.Fatal("Error: must folow format {command} or {command} {data}, example 'servo send-to 2000'")
+		log.Fatal("Expected {command} or {command} {data}, example 'servo send-to 2000'")
 	}
 
-	i := os.Getenv("SERVO_DRIVE_ID")
+	f, err := funcCode(c)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(f)
+
+	i, ok := os.LookupEnv("SERVO_DRIVE_ID")
+	if !ok {
+		log.Fatal("SERVO_DRIVE_ID env var not set")
+	}
 	id, err := strconv.Atoi(i)
 	if err != nil {
 		log.Fatalf("Failed to convert servo id env var to string: %v", err)
 	}
-	bid := byte(id)
+	idb := byte(id)
 
-	p := os.Getenv("SERVO_USB_PORT")
-	c := &serial.Config{
+	p, ok := os.LookupEnv("SERVO_USB_PORT")
+	if !ok {
+		log.Fatal("SERVO_USB_PORT env var not set")
+	}
+
+	cf := &serial.Config{
 		Name:        p,
 		Baud:        38400,
 		Size:        8,
 		ReadTimeout: time.Millisecond * 500,
 	}
 
-	s, err := serial.OpenPort(c)
+	s, err := serial.OpenPort(cf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer s.Close()
 
-	//forward packet = x02 xe3 xbd xfe xc9 x80 xe9
-	//stop packet = x02 x83 x80 x85
+	packet := []byte{idb}
 
-	stop := []byte{bid, 0x83, 0x80, 0x85}
-
-	n, err := s.Write(stop)
+	n, err := s.Write(packet)
 	if err != nil {
 		log.Fatalf("Error Writing: %v", err)
 	}
