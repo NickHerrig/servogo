@@ -2,34 +2,30 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"strconv"
-	"time"
+    "flag"
+//	"log"
+//	"os"
+//	"strconv"
+//	"time"
 
-	"github.com/tarm/serial"
+//	"github.com/tarm/serial"
 )
 
 func main() {
-	var c string
-	var d int
 
-	if len(os.Args) == 2 {
-		c = os.Args[1]
-		d = 0
-		fmt.Println("Command:", c, "Data:", d)
-	} else if len(os.Args) == 3 {
-		c = os.Args[1]
-		ds := os.Args[2]
-		d, err := strconv.Atoi(ds)
-		if err != nil {
-			log.Fatalf("Positional arg 2 must be an integer.")
-		}
-		fmt.Println("Command: ", c, "Data: ", d)
-	} else {
-		log.Fatal("Expected {command} or {command} {data}, example 'servo send-to 2000'")
-	}
+    command := flag.String("command", "", "the command to send to the motor")
+    data := flag.Int("data", 0, "data to send with motor command")
+    flag.Parse()
 
+    err = ValidateInput(*command, *data)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Println("Command:", *command, "Data:", *data)
+
+
+/*
 	f, err := funcCode(c)
 	if err != nil {
 		log.Fatal(err)
@@ -78,4 +74,5 @@ func main() {
 	}
 
 	log.Print(buf[:n])
+*/
 }
