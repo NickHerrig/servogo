@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
     "flag"
+    "log"
 //	"log"
 //	"os"
 //	"strconv"
@@ -13,17 +14,17 @@ import (
 
 func main() {
 
-    command := flag.String("command", "", "the command to send to the motor")
+    command := flag.String("command", "", "the command to send to the motor (Required)")
     data := flag.Int("data", 0, "data to send with motor command")
     flag.Parse()
 
-    err = ValidateInput(*command, *data)
+    err := ValidateInput(*command, *data)
     if err != nil {
+        flag.PrintDefaults()
         log.Fatal(err)
     }
 
     fmt.Println("Command:", *command, "Data:", *data)
-
 
 /*
 	f, err := funcCode(c)
