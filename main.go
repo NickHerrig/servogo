@@ -26,6 +26,8 @@ func main() {
 
     fmt.Println("Command:", *command, "Data:", *data)
 
+    //TODO: Motor struct? 
+
 /*
 	f, err := funcCode(c)
 	if err != nil {

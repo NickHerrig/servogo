@@ -11,12 +11,14 @@ type Values struct {
 func ValidateInput(c string, d int) error{
 
     validInputs := map[string]Values {
-        "stop": {0, 0},
+        "stop":    {0, 0},
+        "forwards": {0, 0},
+        "backwards": {0, 0},
     }
 
     //Check that user passed a command
     if c == "" {
-        return errors.New("Servo command is required!")
+        return errors.New("Motor command is required")
     }
 
     //Check that user passed a valid command
@@ -25,7 +27,11 @@ func ValidateInput(c string, d int) error{
 	}
 
     //Check that user passed valid data for command
-    //TODO
+    min := validInputs[c].min
+    max := validInputs[c].max
+    if d < min || d > max {
+        return errors.New("Invalid data for command")
+    }
     
     return nil
 }
