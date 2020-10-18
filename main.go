@@ -26,29 +26,43 @@ func main() {
 
     fmt.Println("Command:", *command, "Data:", *data)
 
-    //TODO: Motor struct? 
 
-/*
-	f, err := funcCode(c)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(f)
+/*  SKETCHING DATA FLOW AND LAYOUT
+    INPUT:
+        command and data _should_ be  English... Implementation will differ by motor
+        keep flags in main...
 
-	i, ok := os.LookupEnv("SERVO_DRIVE_ID")
-	if !ok {
-		log.Fatal("SERVO_DRIVE_ID env var not set")
-	}
-	id, err := strconv.Atoi(i)
-	if err != nil {
-		log.Fatalf("Failed to convert servo id env var to string: %v", err)
-	}
-	idb := byte(id)
+    INPUT VALIDATION:
+        Input validation will _probably_ be motor specific.
+        maybe this goes in a module?
 
-	p, ok := os.LookupEnv("SERVO_USB_PORT")
-	if !ok {
-		log.Fatal("SERVO_USB_PORT env var not set")
-	}
+    SERIAL CONFIG:
+        Serial configuration is the only external dependency.
+        Most packages come with a Config struct for BaudRates/Ports/etc..
+        Keep in main for now
+
+    CREATE PACKET:
+        Once we have valid input, we need to craft a packet...
+        packets are motor specific, but I want to keep I/O in main..
+        is that a valid want? for now I think so.
+        Does this belong in a module specific to motors? along with input validation
+        and packet parsing? Might be interesting to look into a motor struct and implement
+        an interface? similar to past projects where storage is an interface for mysql/sqlite3
+
+    WRITE PACKET:
+        Pretty straight forward... once you have the packet, write serial to port..
+
+    READ PACKET:
+        Also straightforward, need to parse to make sense of it!
+
+    PARSE PACKET:
+        Parsing the packet will also differ deppending on the motor...
+        We will read packet here, but need to pass the packet to module to make sense of it..
+        more I think of it, the motor specifics like creating packet, validating data(input),
+        and reading responses probably belong in a module.. can I implement an interface
+        to do this elegantly if I have more than one motor? is this a pre-optimization?
+
+
 
 	cf := &serial.Config{
 		Name:        p,
@@ -63,19 +77,5 @@ func main() {
 	}
 	defer s.Close()
 
-	packet := []byte{idb}
-
-	n, err := s.Write(packet)
-	if err != nil {
-		log.Fatalf("Error Writing: %v", err)
-	}
-
-	buf := make([]byte, 128)
-	n, err = s.Read(buf)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Print(buf[:n])
 */
 }

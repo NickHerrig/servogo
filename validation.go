@@ -8,9 +8,9 @@ type Values struct {
     min, max int
 }
 
-var MissingCommandError = errors.New("No command sent, Motor command is required")
+var MissingCommandError = errors.New("No command sent, motor command is required")
 var InvalidCommandError = errors.New("Invalid command sent, send an valid command")
-var InvalidDataError = errors.New("Invalid data for command, Send data in range")
+var InvalidDataError = errors.New("Invalid data sent for command")
 
 func ValidateInput(c string, d int) error{
     //Map of commands and valid data ranges for input validation
