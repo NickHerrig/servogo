@@ -1,16 +1,16 @@
 package main
 
 import (
-    "testing"
-    "errors"
+	"errors"
+	"testing"
 )
 
 func TestInputValidation(t *testing.T) {
 	tests := []struct {
-		name      string
-		command   string 
-		data      int 
-		want      error
+		name    string
+		command string
+		data    int
+		want    error
 	}{
 		{"Valid stop", "stop", 0, nil},
 		{"Invalid stop", "stop", 10, InvalidDataError},
@@ -21,9 +21,9 @@ func TestInputValidation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			err := ValidateInput(tt.command, tt.data)
 			if err != nil {
-                if errors.Is(err, tt.want) != true {
-                    t.Errorf("want %q; got %q", tt.want, err)
-                }
+				if errors.Is(err, tt.want) != true {
+					t.Errorf("want %q; got %q", tt.want, err)
+				}
 			}
 		})
 	}
