@@ -8,8 +8,12 @@ type Values struct {
     min, max int
 }
 
-func ValidateInput(c string, d int) error{
+var MissingCommandError = errors.New("No command sent, Motor command is required")
+var InvalidCommandError = errors.New("Invalid command sent, send an valid command")
+var InvalidDataError = errors.New("Invalid data for command, Send data in range")
 
+func ValidateInput(c string, d int) error{
+    //Map of commands and valid data ranges for input validation
     validInputs := map[string]Values {
         "stop":    {0, 0},
         "forwards": {0, 0},
@@ -18,19 +22,19 @@ func ValidateInput(c string, d int) error{
 
     //Check that user passed a command
     if c == "" {
-        return errors.New("Motor command is required")
+        return MissingCommandError 
     }
 
     //Check that user passed a valid command
 	if  _, ok := validInputs[c]; !ok {
-		return errors.New("Command not Implemeneted") 
+		return InvalidCommandError 
 	}
 
     //Check that user passed valid data for command
     min := validInputs[c].min
     max := validInputs[c].max
     if d < min || d > max {
-        return errors.New("Invalid data for command")
+        return InvalidDataError 
     }
     
     return nil
