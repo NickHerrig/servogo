@@ -2,11 +2,13 @@ package main
 
 import (
 	"errors"
+	"strconv"
 )
 
 var PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
 var DataParseError = errors.New("dataBytes(): data could not be parsed int 1-4 bytes.")
 var FuncCodeNotImplemented = errors.New("funcCode(): That command isn't implemetnted.")
+var InvalidDriveIdError = errors.New("")
 
 func checksumByte(p []byte) byte {
 	var cs byte
@@ -21,12 +23,9 @@ func packetLengthFuncCodeByte(l, f byte) byte {
 }
 
 func funcCode(c string) (byte, error) {
-	codes := map[string]byte{
-		"stop": 0x03,
-	}
 
-	if fc, ok := codes[c]; ok {
-		return fc, nil
+	if _, ok := commandMap[c]; ok {
+		return commandMap[c].code, nil
 	} else {
 		return 0, FuncCodeNotImplemented
 	}
@@ -72,4 +71,20 @@ func dataBytes(d int) ([]byte, error) {
 		return nil, DataParseError
 	}
 
+}
+
+func motorIdByte(s string) (byte, error) {
+
+	// Convert string env var to int or fail
+	id, err := strconv.Atoi(s)
+	if err != nil {
+		return 0, err
+	}
+
+	// Validate id is 0 ~ 63 or fail!
+	if id < 0 || id > 63 {
+		return 0, InvalidDriveIdError
+	}
+
+	return byte(id), nil
 }

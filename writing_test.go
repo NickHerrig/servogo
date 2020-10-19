@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"errors"
+	"strconv"
 	"testing"
 )
 
@@ -117,6 +118,37 @@ func TestPacketLengthFuncCodeByte(t *testing.T) {
 			b := packetLengthFuncCodeByte(tt.packetLen, tt.funcCode)
 			if b != tt.want {
 				t.Errorf("want %q; got %q", tt.want, b)
+			}
+		})
+	}
+}
+
+func TestMotorIdByte(t *testing.T) {
+	tests := []struct {
+		name      string
+		input     string
+		want      byte
+		wantError error
+	}{
+		{"servo id 2", "2", 0x02, nil},
+		{"string invalid servo id", "invalid", 0, strconv.ErrSyntax},
+		{"out of range servo id", "72", 0, InvalidDriveIdError},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			id, err := motorIdByte(tt.input)
+
+			if err != nil {
+				if errors.Is(err, tt.wantError) != true {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
+			} else {
+				if id != tt.want {
+					t.Errorf("want %q; got %q", tt.want, id)
+				}
+				if err != tt.wantError {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
 			}
 		})
 	}
