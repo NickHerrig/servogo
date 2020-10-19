@@ -153,3 +153,33 @@ func TestMotorIdByte(t *testing.T) {
 		})
 	}
 }
+
+func TestFuncCode(t *testing.T) {
+	tests := []struct {
+		name      string
+		input     string
+		want      byte
+		wantError error
+	}{
+		{"valid stop", "stop", 0x03, nil},
+		{"invalid command", "expload", 0, FuncCodeNotImplemented},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fc, err := funcCode(tt.input)
+
+			if err != nil {
+				if errors.Is(err, tt.wantError) != true {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
+			} else {
+				if fc != tt.want {
+					t.Errorf("want %q; got %q", tt.want, fc)
+				}
+				if err != tt.wantError {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
+			}
+		})
+	}
+}
