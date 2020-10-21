@@ -2,8 +2,8 @@ package main
 
 import (
 	"errors"
-    "os"
-    "log"
+	"log"
+	"os"
 	"strconv"
 )
 
@@ -92,48 +92,52 @@ func motorIdByte(s string) (byte, error) {
 }
 
 func CreatePacket(c string, d int) ([]byte, error) {
-    /*
-    -------------------------------------------------------
-    | ID                          | One byte (Start byte) |
-    | packetLength + functioncode | One byte              |
-    | data                        | One to four bytes     |
-    | checksum                    | One byte              |
-    -------------------------------------------------------
-    */
-    
-    var packet []byte
+	/*
+	   -------------------------------------------------------
+	   | ID                          | One byte (Start byte) |
+	   | packetLength + functioncode | One byte              |
+	   | data                        | One to four bytes     |
+	   | checksum                    | One byte              |
+	   -------------------------------------------------------
+	*/
 
-    // fetch motor env var, create motor start byte, append to packet
-    id, ok := os.LookupEnv("SERVO_DRIVE_ID")
+	var packet []byte
+
+	// fetch motor env var, create motor start byte, append to packet
+	id, ok := os.LookupEnv("SERVO_DRIVE_ID")
 	if !ok {
 		log.Fatal("SERVO_DRIVE_ID env var not set")
 	}
-    motorId, err := motorIdByte(id)
-    if err != nil {
-        return nil, err    
-    }
-    packet = append(packet, motorId)
+	motorId, err := motorIdByte(id)
+	if err != nil {
+		return nil, err
+	}
+	packet = append(packet, motorId)
 
-    // create packetLength, FunctionCode, and append ByteTwo to packet 
-    pl, err :=  packetLength(d)
-    if err != nil {
-        return nil, err 
-    }
-    fc, err := funcCode(c)
-    if err != nil {
-        return nil, err 
-    }
-    plfcbyt := packetLengthFuncCodeByte(pl, fc)
-    packet = append(packet, plfcbyt)
+	// create packetLength, FunctionCode, and append byte to packet
+	pl, err := packetLength(d)
+	if err != nil {
+		return nil, err
+	}
+	fc, err := funcCode(c)
+	if err != nil {
+		return nil, err
+	}
+	plfcbyt := packetLengthFuncCodeByte(pl, fc)
+	packet = append(packet, plfcbyt)
 
-    // create databytes, iterate over []byte and append to packet
-    dbs, err := dataBytes(d)
-    if err != nil {
-        return nil, err 
-    }
+	// create databytes, iterate over []byte and append to packet
+	dbs, err := dataBytes(d)
+	if err != nil {
+		return nil, err
+	}
 	for _, bt := range dbs {
 		packet = append(packet, bt)
 	}
-    
-    return packet, nil
+
+	// create checksum byte from packet and append to packet
+	cs := checksumByte(packet)
+	packet = append(packet, cs)
+
+	return packet, nil
 }
