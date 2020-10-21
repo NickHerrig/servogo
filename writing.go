@@ -125,6 +125,15 @@ func CreatePacket(c string, d int) ([]byte, error) {
     }
     plfcbyt := packetLengthFuncCodeByte(pl, fc)
     packet = append(packet, plfcbyt)
+
+    // create databytes, iterate over []byte and append to packet
+    dbs, err := dataBytes(d)
+    if err != nil {
+        return nil, err 
+    }
+	for _, bt := range dbs {
+		packet = append(packet, bt)
+	}
     
     return packet, nil
 }

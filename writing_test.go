@@ -190,7 +190,7 @@ func TestCreatePacket(t *testing.T) {
 		want         []byte
 		wantError    error
 	}{
-		{"valid stop command", "stop", 0, []byte{0x02, 0x83}, nil},
+		{"valid stop command", "stop", 0, []byte{0x02, 0x83, 0x80}, nil},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
