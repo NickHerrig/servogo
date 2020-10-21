@@ -33,13 +33,15 @@ func main() {
 	}
 	defer port.Close()
 
-	/*
-	       // Create dmm packet from command and data
-	       pkt, err := CreatePacket(*command, *data)
-	       if err != nil {
-	           log.Fatal(err)
-	       }
+	// Create dmm packet from command and data
+	pkt, err := CreatePacket(*command, *data)
+	if err != nil {
+		log.Fatal(err)
+	}
 
+	fmt.Println(pkt)
+
+	/*
 	       // Write data and register response
 	       _, err := port.Write(pkt)
 	       if err != nil {

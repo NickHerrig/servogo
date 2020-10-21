@@ -2,6 +2,8 @@ package main
 
 import (
 	"errors"
+    "os"
+    "log"
 	"strconv"
 )
 
@@ -87,4 +89,42 @@ func motorIdByte(s string) (byte, error) {
 	}
 
 	return byte(id), nil
+}
+
+func CreatePacket(c string, d int) ([]byte, error) {
+    /*
+    -------------------------------------------------------
+    | ID                          | One byte (Start byte) |
+    | packetLength + functioncode | One byte              |
+    | data                        | One to four bytes     |
+    | checksum                    | One byte              |
+    -------------------------------------------------------
+    */
+    
+    var packet []byte
+
+    // fetch motor env var, create motor start byte, append to packet
+    id, ok := os.LookupEnv("SERVO_DRIVE_ID")
+	if !ok {
+		log.Fatal("SERVO_DRIVE_ID env var not set")
+	}
+    motorId, err := motorIdByte(id)
+    if err != nil {
+        return nil, err    
+    }
+    packet = append(packet, motorId)
+
+    // create packetLength, FunctionCode, and append ByteTwo to packet 
+    pl, err :=  packetLength(d)
+    if err != nil {
+        return nil, err 
+    }
+    fc, err := funcCode(c)
+    if err != nil {
+        return nil, err 
+    }
+    plfcbyt := packetLengthFuncCodeByte(pl, fc)
+    packet = append(packet, plfcbyt)
+    
+    return packet, nil
 }
