@@ -26,12 +26,19 @@ func main() {
 	}
 	fmt.Println("Command:", *command, "Data:", *data)
 
-	// Open serial port and defer closing
-	port, err := openPort()
-	if err != nil {
-		log.Fatal(err)
+	// If command was passed with no data, return command data
+	if *data == 0 {
+		*data = commandMap[*command].data
 	}
-	defer port.Close()
+
+	fmt.Println("Command:", *command, "Data:", *data)
+
+	// Open serial port and defer closing
+	//	port, err := openPort()
+	//	if err != nil {
+	//		log.Fatal(err)
+	//	}
+	//	defer port.Close()
 
 	// Create dmm packet from command and data
 	pkt, err := CreatePacket(*command, *data)
