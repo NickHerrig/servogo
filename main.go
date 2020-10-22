@@ -4,41 +4,31 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	//	"log"
 	"os"
-	//	"strconv"
 	"time"
 
 	"github.com/tarm/serial"
 )
 
 func main() {
-	// Collect user input with flags
+	// Collect user input
 	command := flag.String("command", "", "the command to send to the motor (Required)")
 	data := flag.Int("data", 0, "data to send with motor command")
 	flag.Parse()
 
-	// Validate user input
+	// Validate user input, if error print flag details and fail program
 	err := ValidateInput(*command, *data)
 	if err != nil {
 		flag.PrintDefaults()
 		log.Fatal(err)
 	}
-	fmt.Println("Command:", *command, "Data:", *data)
 
-	// If command was passed with no data, return command data
+	// Is this a hack?, need more eyes on this...
+	// If command was passed with no data, change data to record in map[command]Functions.data
+	// example: "servogo forwards" == servogo fowards --data 13000000
 	if *data == 0 {
 		*data = commandMap[*command].data
 	}
-
-	fmt.Println("Command:", *command, "Data:", *data)
-
-	// Open serial port and defer closing
-	//	port, err := openPort()
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
-	//	defer port.Close()
 
 	// Create dmm packet from command and data
 	pkt, err := CreatePacket(*command, *data)
@@ -46,31 +36,35 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(pkt)
+	//Open serial port and defer closing
+	port, err := openPort()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer port.Close()
 
-	/*
-	       // Write data and register response
-	       _, err := port.Write(pkt)
-	       if err != nil {
-	           log.Fatal(err)
-	       }
+	// Write data to serial port
+	n, err := port.Write(pkt)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Bytes Written:", n)
 
-	       // Read data from drive into buffer
-	   	buf := make([]byte, 128)
-	   	n, err = s.Read(buf)
-	   	if err != nil {
-	   		log.Fatal(err)
-	   	}
+	// Read data from drive into buffer
+	buf := make([]byte, 128)
+	n, err = port.Read(buf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Bytes Read:", n)
 
-	       // Parse dmm response packet
-	       res, err := ParsePacket(n)
-	       if err != nil {
-	           log.Fatal(err)
-	       }
-
-	       // Do something with dmm response
-	       TODO
-	*/
+	// Parse dmm response packet
+	res, err := ParsePacket(buf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Do something with dmm response
+	fmt.Println(res)
 }
 
 func openPort() (*serial.Port, error) {
