@@ -10,7 +10,7 @@ import (
 var PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
 var DataParseError = errors.New("dataBytes(): data could not be parsed int 1-4 bytes.")
 var FuncCodeNotImplemented = errors.New("funcCode(): That command isn't implemetnted.")
-var InvalidDriveIdError = errors.New("")
+var InvalidDriveIdError = errors.New("motorIdByte(): Drive Id must be 0 ~ 63")
 
 func checksumByte(p []byte) byte {
 	var cs byte

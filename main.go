@@ -57,6 +57,8 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println("Bytes Read:", n)
+    log.Printf("%q", buf[:n])
+
 
 	// Parse dmm response packet
 	res, err := ParsePacket(buf)
