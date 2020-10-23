@@ -15,4 +15,5 @@ var commandMap = map[string]Functions{
 	"forwards":  {"Go_Relative_Pos", 0, 0, 0x03, 13000000},
 	"backwards": {"Go_Relative_Pos", 0, 0, 0x03, -13000000},
 	"send-to":   {"Go_Absolute_Pos", 0, 0, 0x01, 0},
+	"position":  {"Read_Drive_Config", 0, 0, 0x08, 0x1b},
 }
