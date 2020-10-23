@@ -1,6 +1,22 @@
 # servogo
 a thin cli/api for controlling servo motors over serial protocol written in go
 
+## Usage
+- Pull code and build with:
+```shell
+go build
+```
+
+- Sent env vars
+```shell
+SERVO_DRIVE_ID={motor-id}
+SERVO_USB_PORT={serial-port}
+```
+
+```shell
+./servogo --command {command} --data {optional-data}
+```
+
 ## Commands
 
 
