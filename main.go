@@ -51,22 +51,20 @@ func main() {
 	fmt.Println("Bytes Written:", n)
 
 	// Read data from drive into buffer
-	buf := make([]byte, 128)
+	buf := make([]byte, 8)
 	n, err = port.Read(buf)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Bytes Read:", n)
-    log.Printf("%q", buf[:n])
 
-
-	// Parse dmm response packet
-	res, err := ParsePacket(buf)
+	// Parse dmm response packet from motor response
+	res := buf[:n]
+	msg, err := ParsePacket(res)
 	if err != nil {
 		log.Fatal(err)
 	}
 	// Do something with dmm response
-	fmt.Println(res)
+	fmt.Println(msg)
 }
 
 func openPort() (*serial.Port, error) {
