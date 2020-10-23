@@ -12,14 +12,6 @@ var DataParseError = errors.New("dataBytes(): data could not be parsed int 1-4 b
 var FuncCodeNotImplemented = errors.New("funcCode(): That command isn't implemetnted.")
 var InvalidDriveIdError = errors.New("motorIdByte(): Drive Id must be 0 ~ 63")
 
-func checksumByte(p []byte) byte {
-	var cs byte
-	for _, v := range p {
-		cs += v
-	}
-	return (cs & 0x7f) | 0x80
-}
-
 func packetLengthFuncCodeByte(l, f byte) byte {
 	return l | f
 }
@@ -54,7 +46,7 @@ func dataBytes(d int) ([]byte, error) {
 		return nil, PacketLengthParseError
 	}
 
-	// parse data into 4 bytes (7 bits long), and add start start bit
+	// parse data into 4 bytes (7 bits long), and add start bit
 	var df byte = byte(((d & 0xFE00000) >> 21) | 0x80)
 	var dh byte = byte(((d & 0x1FC000) >> 14) | 0x80)
 	var dt byte = byte(((d & 0x3F80) >> 7) | 0x80)
