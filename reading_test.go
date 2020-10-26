@@ -7,9 +7,9 @@ import (
 
 func TestParseData(t *testing.T) {
 	tests := []struct {
-		name  string
-		data  []byte
-		want  int 
+		name string
+		data []byte
+		want int
 	}{
 		{"one positive data packet", []byte{0xBC}, 60},
 		{"one negative data packet", []byte{0xC4}, -60},
