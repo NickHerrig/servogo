@@ -11,9 +11,11 @@ type Functions struct {
 
 //Map of commands dmm function implementation detail struct
 var commandMap = map[string]Functions{
-	"stop":      {"Go_Relative_Pos", 0, 0, 0x03, 0},
-	"forwards":  {"Go_Relative_Pos", 0, 0, 0x03, 13000000},
-	"backwards": {"Go_Relative_Pos", 0, 0, 0x03, -13000000},
-	"send-to":   {"Go_Absolute_Pos", 0, 0, 0x01, 0},
-	"position":  {"Read_Drive_Config", 0, 0, 0x08, 0x1b},
+	"stop":       {"Go_Relative_Pos", 0, 0, 0x03, 0},
+	"forwards":   {"Go_Relative_Pos", 0, 0, 0x03, 13000000},
+	"backwards":  {"Go_Relative_Pos", 0, 0, 0x03, -13000000},
+	"send-to":    {"Go_Absolute_Pos", -134217728, 1342177270, 0x01, 0},
+	"position":   {"General_Read", 0, 0, 0x0E, 0x1B},
+	"set-speed":  {"Set_HighSpeed", 0, 127, 0x14, 0},
+	"read-speed": {"Read_HighSpeed", 0, 0, 0x1C, 0},
 }
