@@ -33,10 +33,9 @@ func ParsePacket(p []byte) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	// grab function code from byte two
-	fc := p[1] | 0x1F
-	//TODO grab data bytes
-	d := []byte{0x01, 0x02}
+
+	fc := p[1] | 0x1F    // grab function code from byte two
+	d := p[2 : len(p)-1] // grab data bytes
 
 	var msg int
 	// deppending on func code prase data differently
@@ -46,10 +45,6 @@ func ParsePacket(p []byte) (int, error) {
 		//TODO: parse IS_CONFIG return byte
 	} else {
 		msg = parseData(d)
-	}
-
-	if err != nil {
-		return 0, err
 	}
 
 	return msg, nil

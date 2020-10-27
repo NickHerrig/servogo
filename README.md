@@ -17,12 +17,19 @@ SERVO_USB_PORT={serial-port}
 ./servogo --command {command} --data {optional-data}
 ```
 
-## Commands
+## Implemented Commands (functions.go)
 
 
-| Command         |  Data Range              |  Description                      |
-|:---------------:|:------------------------:|:---------------------------------:|
-|    stop         |  None                    | stops the motor                   | 
+| Command         |  Data Range              |  Description                              |
+|:---------------:|:------------------------:|:-----------------------------------------:|
+|    stop         |  None                    | stops the motor                           | 
+|    forwards     |  None                    | sends the motor fowards                   | 
+|    backwards    |  None                    | sends the motor backwards                 | 
+|    send-to      | -134217728 ~ 1342177270  | sends the motor to specific position      |
+|    position     |  None                    | returns the motors specific position      | 
+|    set-speed    |  0 ~ 127                 | sets the motors speed                     | 
+|    read-speed   |  None                    | reads the motors speed                    |
+
 
 ## Testing 
 To run tests in the current directory type

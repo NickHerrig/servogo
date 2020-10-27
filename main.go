@@ -23,7 +23,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Is this a hack?, need more eyes on this...
 	// If command was passed with no data, change data to record in map[command]Functions.data
 	// example: "servogo forwards" == servogo fowards --data 13000000
 	if *data == 0 {
@@ -64,6 +63,7 @@ func main() {
 		log.Fatal(err)
 	}
 	// Do something with dmm response
+	fmt.Println("Running command:", *command)
 	fmt.Println(msg)
 }
 
