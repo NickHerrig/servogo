@@ -4,7 +4,10 @@ import (
 	"errors"
 )
 
-var InvalidChecksumError = errors.New("validateChecksum(): The checksum packet was not valid.")
+// Error codes returned by reading packet from servo 
+var (
+    InvalidChecksumError = errors.New("validateChecksum(): The checksum packet was not valid.")
+)
 
 func parseData(d []byte) int {
 	p := int(d[0] & 0x7f)

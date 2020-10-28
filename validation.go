@@ -4,9 +4,12 @@ import (
 	"errors"
 )
 
-var MissingCommandError = errors.New("No command sent, motor command is required")
-var InvalidCommandError = errors.New("Invalid command sent, send an valid command")
-var InvalidDataError = errors.New("Invalid data sent for command")
+// Errors returned from user input validation package
+var (
+    MissingCommandError = errors.New("No command sent, motor command is required")
+    InvalidCommandError = errors.New("Invalid command sent, send an valid command")
+    InvalidDataError = errors.New("Invalid data sent for command")
+)
 
 func ValidateInput(c string, d int) error {
 	//Check that user passed a command

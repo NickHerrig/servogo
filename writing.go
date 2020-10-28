@@ -7,10 +7,13 @@ import (
 	"strconv"
 )
 
-var PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
-var DataParseError = errors.New("dataBytes(): data could not be parsed int 1-4 bytes.")
-var FuncCodeNotImplemented = errors.New("funcCode(): That command isn't implemetnted.")
-var InvalidDriveIdError = errors.New("motorIdByte(): Drive Id must be 0 ~ 63")
+// Errors returned from writing packet functions 
+var (
+    PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
+    DataParseError = errors.New("dataBytes(): data could not be parsed into 1-4 bytes.")
+    FuncCodeNotImplemented = errors.New("funcCode(): That command isn't implemetnted.")
+    InvalidDriveIdError = errors.New("motorIdByte(): Drive Id must be 0 ~ 63")
+)
 
 func packetLengthFuncCodeByte(l, f byte) byte {
 	return l | f
