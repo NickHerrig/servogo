@@ -32,6 +32,8 @@ SERVO_USB_PORT={serial-port}
 
 
 ## Testing 
+Testing runs on every commit to master via github actions
+
 To run tests in the current directory type
 ```shell
 go test .
