@@ -13,10 +13,10 @@ import (
 func main() {
 	// Collect user input
 	command := flag.String("command", "", "the command to send to the motor (Required)")
-	data := flag.Int("data", 0, "data to send with motor command")
+	data := flag.Int("data", 0, "data to send with motor command (Optional)")
 	flag.Parse()
 
-	// Validate user input, if error print flag details and fail program
+	// Validate user input, if error, print flag details and log failure
 	err := ValidateInput(*command, *data)
 	if err != nil {
 		flag.PrintDefaults()
@@ -62,6 +62,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// Do something with dmm response
 	fmt.Println("Running command:", *command)
 	fmt.Println(msg)
