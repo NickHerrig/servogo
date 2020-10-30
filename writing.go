@@ -99,10 +99,10 @@ func CreatePacket(c string, d int) ([]byte, error) {
 	var packet []byte
 
 	// fetch motor env var, create motor start byte, append to packet
-	//id, ok := os.LookupEnv("SERVO_DRIVE_ID")
-	//if !ok {
-	//	log.Fatal("SERVO_DRIVE_ID env var not set")
-	//}
+	id, ok := os.LookupEnv("SERVO_DRIVE_ID")
+	if !ok {
+		log.Fatal("SERVO_DRIVE_ID env var not set")
+    }	
 	motorId, err := motorIdByte(id)
 	if err != nil {
 		return nil, err

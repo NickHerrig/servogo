@@ -11,10 +11,6 @@ import (
 )
 
 func main() {
-	id, ok := os.LookupEnv("SERVO_DRIVE_ID")
-	if !ok {
-		log.Fatal("SERVO_DRIVE_ID env var not set")
-	}
 
 	command := flag.String("command", "", "the command to send to the motor (Required)")
 	data := flag.Int("data", 0, "data to send with motor command (Optional)")
