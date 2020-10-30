@@ -1,4 +1,4 @@
-# servogo
+# servogo ![Go](https://github.com/NickHerrig/servogo/workflows/Go/badge.svg)
 a thin cli/api for controlling servo motors over serial protocol written in go
 
 ## Usage
