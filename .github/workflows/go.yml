@@ -24,3 +24,9 @@ jobs:
 
     - name: Build
       run: go build -v .
+
+    - name: Test cov profile
+      run:  go test -coverprofile=/tmp/profile.out ./...
+
+    - name: Print test coverage
+      run: go tool cover -func=/tmp/profile.out
