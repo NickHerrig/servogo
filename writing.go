@@ -2,8 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
-	"os"
 	"strconv"
 )
 
@@ -86,7 +84,7 @@ func motorIdByte(s string) (byte, error) {
 	return byte(id), nil
 }
 
-func CreatePacket(c string, d int) ([]byte, error) {
+func CreatePacket(id, cmd string, data int) ([]byte, error) {
 	/*
 	   -------------------------------------------------------
 	   | ID                          | One byte (Start byte) |
@@ -98,31 +96,27 @@ func CreatePacket(c string, d int) ([]byte, error) {
 
 	var packet []byte
 
-	// fetch motor env var, create motor start byte, append to packet
-	id, ok := os.LookupEnv("SERVO_DRIVE_ID")
-	if !ok {
-		log.Fatal("SERVO_DRIVE_ID env var not set")
-    }	
-	motorId, err := motorIdByte(id)
+    // create the motor byte
+	mtid, err := motorIdByte(id)
 	if err != nil {
 		return nil, err
 	}
-	packet = append(packet, motorId)
+	packet = append(packet, mtid)
 
 	// create packetLength, FunctionCode, and append byte to packet
-	pl, err := packetLength(d)
+	pl, err := packetLength(data)
 	if err != nil {
 		return nil, err
 	}
-	fc, err := funcCode(c)
+	fc, err := funcCode(cmd)
 	if err != nil {
 		return nil, err
 	}
-	plfcbyt := packetLengthFuncCodeByte(pl, fc)
-	packet = append(packet, plfcbyt)
+	plfcb := packetLengthFuncCodeByte(pl, fc)
+	packet = append(packet, plfcb)
 
 	// create databytes, iterate over []byte and append to packet
-	dbs, err := dataBytes(d)
+	dbs, err := dataBytes(data)
 	if err != nil {
 		return nil, err
 	}

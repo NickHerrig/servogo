@@ -160,3 +160,33 @@ func TestFuncCode(t *testing.T) {
 		})
 	}
 }
+
+func TestCreatePacket(t *testing.T) {
+	tests := []struct {
+		name         string
+        inputId      string
+		inputCommand string
+		inputData    int
+		want         []byte
+		wantError    error
+	}{
+		{"valid stop command", "2", "stop", 0, []byte{0x02, 0x83, 0x80, 0x85}, nil},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pkt, err := CreatePacket(tt.inputId, tt.inputCommand, tt.inputData)
+			if err != nil {
+				if errors.Is(err, tt.wantError) != true {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
+			} else {
+				if bytes.Equal(pkt, tt.want) != true {
+					t.Errorf("want %q; got %q", tt.want, pkt)
+				}
+				if err != tt.wantError {
+					t.Errorf("want %q; got %q", tt.wantError, err)
+				}
+			}
+		})
+	}
+}
