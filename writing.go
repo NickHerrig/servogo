@@ -7,12 +7,12 @@ import (
 	"strconv"
 )
 
-// Errors returned from writing packet functions 
+// Errors returned from writing packet functions
 var (
-    PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
-    DataParseError = errors.New("dataBytes(): data could not be parsed into 1-4 bytes.")
-    FuncCodeNotImplemented = errors.New("funcCode(): That command isn't implemetnted.")
-    InvalidDriveIdError = errors.New("motorIdByte(): Drive Id must be 0 ~ 63")
+	PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
+	DataParseError         = errors.New("dataBytes(): data could not be parsed into 1-4 bytes.")
+	FuncCodeNotImplemented = errors.New("funcCode(): That command isn't implemetnted.")
+	InvalidDriveIdError    = errors.New("motorIdByte(): Drive Id must be 0 ~ 63")
 )
 
 func packetLengthFuncCodeByte(l, f byte) byte {
@@ -99,10 +99,10 @@ func CreatePacket(c string, d int) ([]byte, error) {
 	var packet []byte
 
 	// fetch motor env var, create motor start byte, append to packet
-	id, ok := os.LookupEnv("SERVO_DRIVE_ID")
-	if !ok {
-		log.Fatal("SERVO_DRIVE_ID env var not set")
-	}
+	//id, ok := os.LookupEnv("SERVO_DRIVE_ID")
+	//if !ok {
+	//	log.Fatal("SERVO_DRIVE_ID env var not set")
+	//}
 	motorId, err := motorIdByte(id)
 	if err != nil {
 		return nil, err
