@@ -12,11 +12,11 @@ var (
 	InvalidServoIdError    = errors.New("Invalid servo id sent, must be 0~64")
 )
 
-func ValidateInput(servoId int, command string, data int) error {
+func validateInput(servoId int, command string, data int) error {
 
 	// Validate servoId is between 0 and 63!
-	if id < 0 || id > 63 {
-		return 0, InvalidDriveIdError
+	if servoId < 0 || servoId > 63 {
+		return InvalidDriveIdError
 	}
 
 	if command == "" {
@@ -29,14 +29,14 @@ func ValidateInput(servoId int, command string, data int) error {
 	}
 
 	//Check that user passed a valid command
-	if _, ok := commandMap[c]; !ok {
+	if _, ok := commandMap[command]; !ok {
 		return InvalidCommandError
 	}
 
 	//Check that user passed valid data for command
-	min := commandMap[c].min
-	max := commandMap[c].max
-	if d < min || d > max {
+	min := commandMap[command].min
+	max := commandMap[command].max
+	if data < min || data > max {
 		return InvalidDataError
 	}
 

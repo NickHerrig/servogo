@@ -2,7 +2,8 @@ package dmm
 
 import (
 	"errors"
-	"strconv"
+    "flag"
+    "log"
 )
 
 // Errors returned from writing packet functions

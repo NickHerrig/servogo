@@ -3,7 +3,6 @@ package dmm
 import (
 	"bytes"
 	"errors"
-	"strconv"
 	"testing"
 )
 
@@ -102,36 +101,6 @@ func TestPacketLengthFuncCodeByte(t *testing.T) {
 	}
 }
 
-func TestMotorIdByte(t *testing.T) {
-	tests := []struct {
-		name      string
-		input     string
-		want      byte
-		wantError error
-	}{
-		{"servo id 2", "2", 0x02, nil},
-		{"string invalid servo id", "invalid", 0, strconv.ErrSyntax},
-		{"out of range servo id", "72", 0, InvalidDriveIdError},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			id, err := motorIdByte(tt.input)
-			if err != nil {
-				if errors.Is(err, tt.wantError) != true {
-					t.Errorf("want %q; got %q", tt.wantError, err)
-				}
-			} else {
-				if id != tt.want {
-					t.Errorf("want %q; got %q", tt.want, id)
-				}
-				if err != tt.wantError {
-					t.Errorf("want %q; got %q", tt.wantError, err)
-				}
-			}
-		})
-	}
-}
-
 func TestFuncCode(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -164,13 +133,13 @@ func TestFuncCode(t *testing.T) {
 func TestCreatePacket(t *testing.T) {
 	tests := []struct {
 		name         string
-        inputId      string
+        inputId      int 
 		inputCommand string
 		inputData    int
 		want         []byte
 		wantError    error
 	}{
-		{"valid stop command", "2", "stop", 0, []byte{0x02, 0x83, 0x80, 0x85}, nil},
+		{"valid stop command", 2, "stop", 0, []byte{0x02, 0x83, 0x80, 0x85}, nil},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
