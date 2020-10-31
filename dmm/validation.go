@@ -1,19 +1,30 @@
-package main
+package dmm 
 
 import (
 	"errors"
 )
 
-// Errors returned from user input validation package
+// Errors returned from CreatePacket() input validation
 var (
 	MissingCommandError = errors.New("No command sent, motor command is required")
 	InvalidCommandError = errors.New("Invalid command sent, send an valid command")
 	InvalidDataError    = errors.New("Invalid data sent for command")
+	InvalidServoIdError    = errors.New("Invalid servo id sent, must be 0~64")
 )
 
-func ValidateInput(c string, d int) error {
+func ValidateInput(servoId int, command string, data int) error {
+
+	// Validate servoId is between 0 and 63!
+	if id < 0 || id > 63 {
+		return 0, InvalidDriveIdError
+	}
+
+	if command == "" {
+		return MissingCommandError
+	}
+
 	//Check that user passed a command
-	if c == "" {
+	if command == "" {
 		return MissingCommandError
 	}
 

@@ -1,4 +1,4 @@
-package main
+package dmm 
 
 import (
 	"errors"
@@ -68,23 +68,8 @@ func dataBytes(d int) ([]byte, error) {
 
 }
 
-func motorIdByte(s string) (byte, error) {
 
-	// Convert string env var to int or fail
-	id, err := strconv.Atoi(s)
-	if err != nil {
-		return 0, err
-	}
-
-	// Validate id is 0 ~ 63 or fail!
-	if id < 0 || id > 63 {
-		return 0, InvalidDriveIdError
-	}
-
-	return byte(id), nil
-}
-
-func CreatePacket(id, cmd string, data int) ([]byte, error) {
+func CreatePacket(id int, command string, data int) ([]byte, error) {
 	/*
 	   -------------------------------------------------------
 	   | ID                          | One byte (Start byte) |
@@ -94,13 +79,23 @@ func CreatePacket(id, cmd string, data int) ([]byte, error) {
 	   -------------------------------------------------------
 	*/
 
+	// Validate user input, if error, print flag details and log failure
+	err := validateInput(id, command, data)
+	if err != nil {
+		flag.PrintDefaults()
+		log.Fatal(err)
+	}
+
+	// If command was passed with no data, change data to record in map[command]Functions.data
+	// example: "servogo forwards" == servogo fowards --data 13000000
+	if data == 0 {
+		data = commandMap[command].data
+	}
+
 	var packet []byte
 
-    // create the motor byte
-	mtid, err := motorIdByte(id)
-	if err != nil {
-		return nil, err
-	}
+    // create the motor byte and append to packet
+	mtid := byte(id)
 	packet = append(packet, mtid)
 
 	// create packetLength, FunctionCode, and append byte to packet
@@ -108,7 +103,7 @@ func CreatePacket(id, cmd string, data int) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fc, err := funcCode(cmd)
+	fc, err := funcCode(command)
 	if err != nil {
 		return nil, err
 	}

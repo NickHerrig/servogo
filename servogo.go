@@ -7,37 +7,21 @@ import (
 	"os"
 	"time"
 
+    "github.com/nickherrig/servogo/dmm"
+
 	"github.com/tarm/serial"
 )
 
 func main() {
 
-	// fetch motor env var, create motor start byte, append to packet
-	id, ok := os.LookupEnv("SERVO_DRIVE_ID")
-	if !ok {
-		log.Fatal("SERVO_DRIVE_ID env var not set")
-    }	
-    
-
-	command := flag.String("command", "", "the command to send to the motor (Required)")
-	data := flag.Int("data", 0, "data to send with motor command (Optional)")
+    // command line flags for collecting user input 
+	id := flag.Int("servo id", 0, "the motor id, defaults to 0  (Optional)")
+	command := flag.String("servo command", "", "the command to send to the motor (Required)")
+	data := flag.Int("servo data", 0, "data to send with motor command (Optional)")
 	flag.Parse()
 
-	// Validate user input, if error, print flag details and log failure
-	err := ValidateInput(*command, *data)
-	if err != nil {
-		flag.PrintDefaults()
-		log.Fatal(err)
-	}
-
-	// If command was passed with no data, change data to record in map[command]Functions.data
-	// example: "servogo forwards" == servogo fowards --data 13000000
-	if *data == 0 {
-		*data = commandMap[*command].data
-	}
-
 	// Create dmm packet from command and data
-	pkt, err := CreatePacket(id, *command, *data)
+	pkt, err := dmm.CreatePacket(*id, *command, *data)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -57,7 +41,7 @@ func main() {
 	fmt.Println("Bytes Written:", n)
 
 	// Read data from drive into buffer
-	buf := make([]byte, 8)
+	buf := make([]byte, 128)
 	n, err = port.Read(buf)
 	if err != nil {
 		log.Fatal(err)
@@ -65,7 +49,7 @@ func main() {
 
 	// Parse dmm response packet from motor response
 	res := buf[:n]
-	msg, err := ParsePacket(res)
+	msg, err := dmm.ParsePacket(res)
 	if err != nil {
 		log.Fatal(err)
 	}

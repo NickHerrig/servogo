@@ -1,4 +1,4 @@
-package main
+package dmm 
 
 import (
 	"errors"

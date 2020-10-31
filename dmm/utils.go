@@ -1,4 +1,4 @@
-package main
+package dmm 
 
 // checksumByte returns returns a checksum byte in dmm format
 func checksumByte(p []byte) byte {
