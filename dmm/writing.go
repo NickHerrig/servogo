@@ -1,9 +1,9 @@
-package dmm 
+package dmm
 
 import (
 	"errors"
-    "flag"
-    "log"
+	"flag"
+	"log"
 )
 
 // Errors returned from writing packet functions
@@ -69,7 +69,6 @@ func dataBytes(d int) ([]byte, error) {
 
 }
 
-
 func CreatePacket(id int, command string, data int) ([]byte, error) {
 	/*
 	   -------------------------------------------------------
@@ -95,7 +94,7 @@ func CreatePacket(id int, command string, data int) ([]byte, error) {
 
 	var packet []byte
 
-    // create the motor byte and append to packet
+	// create the motor byte and append to packet
 	mtid := byte(id)
 	packet = append(packet, mtid)
 

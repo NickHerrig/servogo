@@ -1,4 +1,4 @@
-package dmm 
+package dmm
 
 import (
 	"errors"
@@ -9,7 +9,7 @@ var (
 	MissingCommandError = errors.New("No command sent, motor command is required")
 	InvalidCommandError = errors.New("Invalid command sent, send an valid command")
 	InvalidDataError    = errors.New("Invalid data sent for command")
-	InvalidServoIdError    = errors.New("Invalid servo id sent, must be 0~64")
+	InvalidServoIdError = errors.New("Invalid servo id sent, must be 0~64")
 )
 
 func validateInput(servoId int, command string, data int) error {

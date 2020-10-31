@@ -1,4 +1,4 @@
-package dmm 
+package dmm
 
 // Functions struct groups dmm funcs and implementation details
 type Functions struct {

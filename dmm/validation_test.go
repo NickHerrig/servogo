@@ -1,4 +1,4 @@
-package dmm 
+package dmm
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 func TestInputValidation(t *testing.T) {
 	tests := []struct {
 		name    string
-		id      int 
+		id      int
 		command string
 		data    int
 		want    error

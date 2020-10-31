@@ -7,17 +7,17 @@ import (
 	"os"
 	"time"
 
-    "github.com/nickherrig/servogo/dmm"
+	"github.com/nickherrig/servogo/dmm"
 
 	"github.com/tarm/serial"
 )
 
 func main() {
 
-    // command line flags for collecting user input 
-	id := flag.Int("servo id", 0, "the motor id, defaults to 0  (Optional)")
-	command := flag.String("servo command", "", "the command to send to the motor (Required)")
-	data := flag.Int("servo data", 0, "data to send with motor command (Optional)")
+	// command line flags for collecting user input
+	id := flag.Int("id", 0, "the motor id, defaults to 0  (Optional)")
+	command := flag.String("command", "", "the command to send to the motor (Required)")
+	data := flag.Int("data", 0, "data to send with motor command (Optional)")
 	flag.Parse()
 
 	// Create dmm packet from command and data

@@ -133,7 +133,7 @@ func TestFuncCode(t *testing.T) {
 func TestCreatePacket(t *testing.T) {
 	tests := []struct {
 		name         string
-        inputId      int 
+		inputId      int
 		inputCommand string
 		inputData    int
 		want         []byte
