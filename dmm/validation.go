@@ -12,6 +12,17 @@ var (
 	InvalidServoIdError = errors.New("Invalid servo id sent, must be 0~64")
 )
 
+func validateChecksum(p []byte) error {
+	csb := p[len(p)-1] // checksum byte is last byte in packet
+	bp := p[:len(p)-1] // slice of the rest of the packet
+	cs := checksumByte(bp)
+	if csb == cs {
+		return nil
+	} else {
+		return InvalidChecksumError
+	}
+}
+
 func validateInput(servoId int, command string, data int) error {
 
 	// Validate servoId is between 0 and 63!

@@ -38,7 +38,7 @@ func parseStatus(d byte) string {
 	}
 
 	motionBit := (d >> 5) & 1
-    fmt.Println(motionBit)
+	fmt.Println(motionBit)
 	if motionBit == 0 {
 		s.Motion = "completed"
 	} else {
@@ -64,17 +64,7 @@ func parseData(d []byte) string {
 	return msg
 }
 
-func validateChecksum(p []byte) error {
-	csb := p[len(p)-1] // checksum byte is last byte in packet
-	bp := p[:len(p)-1] // slice of the rest of the packet
-	cs := checksumByte(bp)
-	if csb == cs {
-		return nil
-	} else {
-		return InvalidChecksumError
-	}
-}
-
+// ParsePacket takes a byte slice and returns a parsed string message
 func ParsePacket(p []byte) (string, error) {
 	// Validate checksum byte from response
 	err := validateChecksum(p)
@@ -82,7 +72,7 @@ func ParsePacket(p []byte) (string, error) {
 		return "", err
 	}
 
-	fc := p[1] | 0x1F    // grab function code from byte two
+	fc := p[1] & 0x1F    // grab function code from byte two
 	d := p[2 : len(p)-1] // grab data bytes
 
 	var msg string
@@ -91,7 +81,7 @@ func ParsePacket(p []byte) (string, error) {
 	if fc == 0x19 {
 		msg = parseStatus(d[0])
 	} else if fc == 0x1A {
-		msg = "not implemented"
+		msg = "drive config not implemented"
 	} else {
 		msg = parseData(d)
 	}
