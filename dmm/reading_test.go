@@ -5,6 +5,24 @@ import (
 	"testing"
 )
 
+func TestParseStatus(t *testing.T) {
+	tests := []struct {
+		name string
+		data byte
+		want string
+	}{
+		{"one positive data packet", 0b10000000, `{"Motion":"completed","Alarm":"no alarm"}`},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			msg := parseStatus(tt.data)
+			if msg != tt.want {
+				t.Errorf("want %s; got %s", tt.want, msg)
+			}
+		})
+	}
+}
+
 func TestParseData(t *testing.T) {
 	tests := []struct {
 		name string

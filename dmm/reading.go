@@ -13,8 +13,8 @@ var (
 )
 
 type motorStatus struct {
-	motion string
-	alarm  string
+	Motion string
+	Alarm  string
 }
 
 func parseStatus(d byte) string {
@@ -24,33 +24,33 @@ func parseStatus(d byte) string {
 	alarmBit := (bit >> 2) & 0b111
 
 	if alarmBit == 0 {
-		s.alarm = "no alarm"
+		s.Alarm = "no alarm"
 	} else if alarmBit == 1 {
-		s.alarm = "lost phase"
+		s.Alarm = "lost phase"
 	} else if alarmBit == 2 {
-		s.alarm = "over current"
+		s.Alarm = "over current"
 	} else if alarmBit == 3 {
-		s.alarm = "overheat/overpower"
+		s.Alarm = "overheat/overpower"
 	} else if alarmBit == 4 {
-		s.alarm = "rcr error"
+		s.Alarm = "rcr error"
 	} else {
-		s.alarm = "TBD"
+		s.Alarm = "TBD"
 	}
 
 	motionBit := (d >> 5) & 1
+    fmt.Println(motionBit)
 	if motionBit == 0 {
-		s.motion = "completed"
+		s.Motion = "completed"
 	} else {
-		s.motion = "busy"
+		s.Motion = "busy"
 	}
 
-	st, err := json.Marshal(s)
+	msg, err := json.Marshal(s)
 	if err != nil {
 		log.Fatal(err)
 	}
-	msg := string(st)
 
-	return msg
+	return string(msg)
 }
 
 func parseData(d []byte) string {
