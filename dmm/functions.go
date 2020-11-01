@@ -18,4 +18,5 @@ var commandMap = map[string]Functions{
 	"position":   {"General_Read", 0, 0, 0x0E, 0x1B},
 	"set-speed":  {"Set_HighSpeed", 0, 127, 0x14, 0},
 	"read-speed": {"Read_HighSpeed", 0, 0, 0x1C, 0},
+	"status":     {"RegisterRead_Drive_Status", 0, 0, 0x09, 0},
 }

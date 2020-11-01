@@ -9,15 +9,14 @@ go build
 
 - Sent env vars
 ```shell
-SERVO_DRIVE_ID={motor-id}
 SERVO_USB_PORT={serial-port}
 ```
 
 ```shell
-./servogo --command {command} --data {optional-data}
+./servogo --id {servo-id} --command {command} --data {optional-data}
 ```
 
-## Implemented Commands (functions.go)
+## Implemented DMM Commands (functions.go)
 
 
 | Command         |  Data Range              |  Description                              |
@@ -29,6 +28,7 @@ SERVO_USB_PORT={serial-port}
 |    position     |  None                    | returns the motors specific position      | 
 |    set-speed    |  0 ~ 127                 | sets the motors speed                     | 
 |    read-speed   |  None                    | reads the motors speed                    |
+|    status       |  None                    | reads the motors status (alarm, motion)   |
 
 
 ## Testing 
@@ -36,7 +36,7 @@ Testing runs on every commit to master via github actions
 
 To run tests in the current directory type
 ```shell
-go test .
+go test -v ./...
 ```
 
 To run test coverage 
