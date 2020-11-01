@@ -30,10 +30,6 @@ func validateInput(servoId int, command string, data int) error {
 		return InvalidServoIdError
 	}
 
-	if command == "" {
-		return MissingCommandError
-	}
-
 	//Check that user passed a command
 	if command == "" {
 		return MissingCommandError
