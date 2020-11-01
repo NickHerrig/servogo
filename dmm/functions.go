@@ -1,3 +1,19 @@
+/*
+
+Package dmm implements a simple library for creating and parsing
+dmm servo motor packets 
+
+The package implements two exported functions: 
+    CreatePacket():
+    ParsePacket():
+
+The package also implements some basic input validation
+specific to the dmm motor specification.
+
+more details about the spec can be found here:
+http://www.dmm-tech.com/Files/DYN4MS-ZM7-A10A.pdf
+
+*/
 package dmm
 
 // Functions struct groups dmm funcs and implementation details

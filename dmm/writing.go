@@ -78,7 +78,7 @@ The packet follows the format:
   B0 - drive id byte
   B1 - packet length and function code byte
   B2 ~ B5 -  data bytes
-| BN-1 - checksum byte
+  BN-1 - checksum byte
 
 */
 func CreatePacket(id int, command string, data int) ([]byte, error) {
