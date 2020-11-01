@@ -1,8 +1,14 @@
 # servogo ![Go](https://github.com/NickHerrig/servogo/workflows/Go/badge.svg)
 a thin cli/api for controlling servo motors over serial protocol written in go
 
+## Go Doc
+View the dmm specific package documentation:
+```shell
+go doc -all dmm
+```
+
 ## Usage
-- Pull code and build with:
+- Pull source code and build with:
 ```shell
 go build
 ```
@@ -12,6 +18,7 @@ go build
 SERVO_USB_PORT={serial-port}
 ```
 
+- Use CLI
 ```shell
 ./servogo --id {servo-id} --command {command} --data {optional-data}
 ```

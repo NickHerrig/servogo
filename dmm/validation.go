@@ -27,7 +27,7 @@ func validateInput(servoId int, command string, data int) error {
 
 	// Validate servoId is between 0 and 63!
 	if servoId < 0 || servoId > 63 {
-		return InvalidDriveIdError
+		return InvalidServoIdError
 	}
 
 	if command == "" {

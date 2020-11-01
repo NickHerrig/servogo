@@ -11,7 +11,6 @@ var (
 	PacketLengthParseError = errors.New("packetLength(): data out of range for dmm servo.")
 	DataParseError         = errors.New("dataBytes(): data could not be parsed into 1-4 bytes.")
 	FuncCodeNotImplemented = errors.New("funcCode(): That command isn't implemetnted.")
-	InvalidDriveIdError    = errors.New("motorIdByte(): Drive Id must be 0 ~ 63")
 )
 
 func packetLengthFuncCodeByte(l, f byte) byte {
@@ -69,15 +68,20 @@ func dataBytes(d int) ([]byte, error) {
 
 }
 
+/*
+CreatePacket() creates a 4 - 7 long []byte from a drive ID
+command, and data and returns it for writing to serial motor.
+
+input validation is also handled through this function.
+
+The packet follows the format:
+  B0 - drive id byte
+  B1 - packet length and function code byte
+  B2 ~ B5 -  data bytes
+| BN-1 - checksum byte
+
+*/
 func CreatePacket(id int, command string, data int) ([]byte, error) {
-	/*
-	   -------------------------------------------------------
-	   | ID                          | One byte (Start byte) |
-	   | packetLength + functioncode | One byte              |
-	   | data                        | One to four bytes     |
-	   | checksum                    | One byte              |
-	   -------------------------------------------------------
-	*/
 
 	// Validate user input, if error, print flag details and log failure
 	err := validateInput(id, command, data)
